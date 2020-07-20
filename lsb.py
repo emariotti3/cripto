@@ -1,65 +1,54 @@
 # Imported PIL Library from PIL import Image
 from PIL import Image
+import numpy as np
 
 PATH_IN = "test.png"
 PATH_OUT = "out.png"
 
-# Open an Image
-def open_image(path):
-  newImage = Image.open(path)
-  return newImage
+STR ='0b10101011001110100000100110110001011001110101001110000011001010100010110000010011111000011101010110011001010100100111110101011001110100000100110110001011001110101001110000011001010100010110000010011111000011101010110011001010100100111110101011001110100000100110110001011001110101001110000011001010100010110000010011111000011101010110011001010100100111110101011001110100000100110110001011001110101001110000011001010100010110000010011111000011101010110011001010100100111110101011001110100000100110110001011001110101001110000011001010100010110000010011111000011101010110011001010100100111110101011001110100000100110110001011001110101001110000011001010100010110000010011100'
 
-# Save Image
-def save_image(image, path):
-  image.save(path, 'png')
+# print("".join([str(x) for x in STR]))
+# A = [','.join(format(i, 'd') for i in bytearray(STR, encoding ='utf-8'))] 
+# print("allaalalalal",A, mystring )
 
-# Create a new image with the given size
-def create_image(i, j):
-  image = Image.new("RGB", (i, j), "white")
-  return image
+def reemplazar_ultimo_bit(original_value, new_last_bit):
+  cantidad_bits = len(new_last_bit)
+  original_byte = bin(original_value)
+  return original_byte[:-cantidad_bits] + new_last_bit
 
-# Get the pixel from the given image
-def get_pixel(image, i, j):
-    # Inside image bounds?
-    width, height = image.size
-    if i > width or j > height:
-      return None
-
-    # Get Pixel
-    pixel = image.getpixel((i, j))
-    return pixel
-
-def convert_grayscale(src_img, dst_img, width, height):
-
-  # Get output image pixel map
-  pixels = dst_img.load()
+def ocultar(src_img, mensaje_bits, cant_bits=1):
+  estego_img = Image.new("RGB", src_img.size, "white")
+  pixeles = estego_img.load()
+  width, height = src_img.size
 
   for i in range(width):
     for j in range(height):
-      pixel = get_pixel(src_img, i, j)
+      red,green,blue,_ = src_img.getpixel((i, j))[:]
+      nro_pixel = i + j % width
+      a,b,c = mensaje_bits[nro_pixel*3:nro_pixel*3+3]
+      pixeles[i, j] = (int(reemplazar_ultimo_bit(red, a),2), int(reemplazar_ultimo_bit(green, b),2), int(reemplazar_ultimo_bit(blue, c),2),_)
+  return estego_img
 
-      # Get R, G, B values (This are int from 0 to 255)
-      red =   pixel[0]
-      green = pixel[1]
-      blue =  pixel[2]
-
-      # Transform to grayscale
-      # TODO: aca hacer la transformacion de pixeles para
-      # meter el mensaje
-      gray = (red * 0.299) + (green * 0.587) + (blue * 0.114)
-
-      # Set Pixel in new image
-      pixels[i, j] = (int(gray), int(gray), int(gray))
-
-  # Return new image
-  return dst_img
+def recuperar_mensaje(estego_img, cant_bits=1):
+  width, height = estego_img.size
+  mensaje = "0b"
+  for i in range(width):
+    for j in range(height):
+      r,g,b = estego_img.getpixel((i, j))[:]
+      mensaje += str(bin(r)[-cant_bits:])+str(bin(g)[-cant_bits:])+str(bin(b)[-cant_bits:])
+  # return str(''.join(format(ord(x), 'c') for x in mensaje))
+  return mensaje
 
 
 def embed_hidden_message():
-  input_img = open_image(PATH_IN)
-  width, height = input_img.size
-  output_img = create_image(width, height)
-  output_img = convert_grayscale(input_img, output_img, width, height)
-  save_image(output_img, PATH_OUT)
+  ##FALATA LOS CHEQUEOS DE LARGOS HAY QUE AALIZAR QUE PASA SI ES MAS CORTO O SI SE 
+  ##PUEDE PARAMETRIZAR LA CANTIDAD DE BITS QUE SE AGREGAN SI ES MAS LARGO
+  mensaje_oculto = "UN MENSAJE OCULTO" #* 300000 * 2  
+  print(''.join(format(ord(x), 'b') for x in mensaje_oculto))
+  input_img = Image.open(PATH_IN)
+  print(input_img.size)
+  output_img = ocultar(input_img, ''.join(format(ord(x), 'b') for x in mensaje_oculto))
+  output_img.save(PATH_OUT)
+  print(recuperar_mensaje(output_img))
 
 embed_hidden_message()
