@@ -4,6 +4,7 @@ PATH_IN = "test.png"
 PATH_OUT = "out.png"
 BITS_FOR_PIXEL = 3
 NULL = '00000000'
+PATH_OUT3= "static\\" + PATH_OUT
 
 def ascii_a_binario(textoPlano):
   byte_array = textoPlano.encode('ascii')
@@ -46,7 +47,7 @@ def generate_stegoimage(src_img, messege_to_hide, cant_bits=1):
   bits_to_hide = get_string_of_bits(messege_to_hide)
   for i in range(width):
     for j in range(height):
-      red,green,blue,_ = src_img.getpixel((i, j))[:]
+      red,green,blue, *_ = src_img.getpixel((i, j))[:]
       pixel_number = i * height + j
       last_bit_red, last_bit_green, last_bit_blue= get_chunk_of_bit_por_pixel(bits_to_hide, pixel_number)
       pixeles[i, j] = (replace_last_bits(red, last_bit_red), replace_last_bits(green, last_bit_green), replace_last_bits(blue, last_bit_blue))
@@ -68,22 +69,61 @@ def recuperar_mensaje(estego_img, cant_bits=1):
   return "".join(letters)
 
 
-def embed_hidden_message():
+# def embed_hidden_message(message_to_hidde):
+#   ##FALATA LOS CHEQUEOS DE LARGOS HAY QUE AALIZAR QUE PASA SI ES MAS CORTO O SI SE 
+#   ##PUEDE PARAMETRIZAR LA CANTIDAD DE BITS QUE SE AGREGAN SI ES MAS LARGO
+#   message_to_hidde 
+#   print("ORIGINAL: {} - largo: {}".format(message_to_hidde, len(message_to_hidde))) 
+
+#   input_img = Image.open(PATH_IN)
+#   output_img = generate_stegoimage(input_img, message_to_hidde) 
+#   output_img.save(PATH_OUT)
+#   input_img.close()
+
+#   stego_image = Image.open(PATH_OUT)
+#   message_hidden = recuperar_mensaje(stego_image)
+#   stego_image.close()
+
+#   print("RECUPERADO: {} - largo: {}".format(message_hidden, len(message_hidden)))
+#   return message_hidden
+
+# def embed_hidden_message2():
+#   ##FALATA LOS CHEQUEOS DE LARGOS HAY QUE AALIZAR QUE PASA SI ES MAS CORTO O SI SE 
+#   ##PUEDE PARAMETRIZAR LA CANTIDAD DE BITS QUE SE AGREGAN SI ES MAS LARGO
+#   message_to_hidde = "CACA aplastada"
+#   message_to_hidde 
+#   print("ORIGINAL: {} - largo: {}".format(message_to_hidde, len(message_to_hidde))) 
+
+#   input_img = Image.open("rojos.png")
+#   output_img = generate_stegoimage(input_img, message_to_hidde) 
+#   output_img.save(PATH_OUT)
+#   input_img.close()
+
+#   stego_image = Image.open(PATH_OUT)
+#   message_hidden = recuperar_mensaje(stego_image)
+#   stego_image.close()
+
+#   print("RECUPERADO: {} - largo: {}".format(message_hidden, len(message_hidden)))
+#   return message_hidden
+
+# embed_hidden_message2()
+
+def embed_hidden_message(path_in, message_to_hidde):
   ##FALATA LOS CHEQUEOS DE LARGOS HAY QUE AALIZAR QUE PASA SI ES MAS CORTO O SI SE 
   ##PUEDE PARAMETRIZAR LA CANTIDAD DE BITS QUE SE AGREGAN SI ES MAS LARGO
-  message_to_hidde = "CACA CA"  
+  # message_to_hidde = "CACA aplastada"
+  # message_to_hidde 
   print("ORIGINAL: {} - largo: {}".format(message_to_hidde, len(message_to_hidde))) 
 
-  input_img = Image.open(PATH_IN)
+  input_img = Image.open(path_in)
   output_img = generate_stegoimage(input_img, message_to_hidde) 
-  output_img.save(PATH_OUT)
+  output_img.save(PATH_OUT3)
   input_img.close()
 
-  stego_image = Image.open(PATH_OUT)
+  stego_image = Image.open(PATH_OUT3)
   message_hidden = recuperar_mensaje(stego_image)
   stego_image.close()
 
-  print("RECUPERADO: {} - largo: {}".format(message_hidden, len(message_hidden))) 
+  print("RECUPERADO: {} - largo: {}".format(message_hidden, len(message_hidden)))
+  return message_hidden
 
-
-embed_hidden_message()

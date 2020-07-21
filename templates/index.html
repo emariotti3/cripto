@@ -1,27 +1,19 @@
 <!doctype html>
 <html>
+
 <head>
-  <title>LSB</title>
-  <!-- <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/style.css') }}" /> -->
+    <title>Estaganografía: Tecnica LSB</title>
+    <!-- <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/style.css') }}" /> -->
 </head>
+
 <body>
-  <h2>Mensaje</h2>
-  <form action="/text" method="post">
-    Input text:<br>
-    <input type="text" name="text_input" value="">
-    <br>
-    <input type="submit" value="Submit">
-  </form>
-  <div>
-  <img src= {{ url_for('static', filename = 'test.png') }} style="width:326px;height:288px;">
-  </div>
-  <div id='foo'>
-    <br>
-    {% for comment in comments %}
-    <div class="row">
-      {{ comment }} 
-    </div>
-    {% endfor %}
-  </div>
+    <h1>Criptografia y seguridad informatic</h1>
+    <h3>Trabajo practico final</h3>
+    <h3>LSB</h3>
+
+    <form action="/lsb_endpoint" method="get">
+        <input type="submit" value="LSB">
+    </form>
 </body>
+
 </html>
