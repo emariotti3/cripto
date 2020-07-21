@@ -79,8 +79,14 @@ def encodearBIENPERRO():
     userEmail = request.form['message_to_hidde']
     filename = uploaded(request)
     message_hidden = ss.embed_hidden_message(os.path.join(BASEDIR, app.config['UPLOAD_FOLDER'], filename), userEmail )
+<<<<<<< HEAD
     image_file = url_for('static', filename=filename)
     return render_template("lsb.html", message_hidden=message_hidden, src_img=image_file, stego_img=ss.PATH_OUT3 )
+=======
+    stego_img = os.path.join(BASEDIR, ss.PATH_OUT3)
+    image_file = url_for('static', filename=filename)
+    return render_template("lsb.html", message_hidden=message_hidden, stego_img=image_file )
+>>>>>>> 4af29ea... Agrego paginas de app y minimo funcionamiento
 
 if __name__ == '__main__':
    app.run(debug=True)
