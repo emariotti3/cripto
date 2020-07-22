@@ -35,6 +35,10 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+@app.route('/demoLSB', methods=['GET', 'POST'])
+def render_lsb():
+    return render_template("lsb.html")
+
 @app.route('/lsb_endpoint', methods=['GET', 'POST'])
 def lsb_endpoint():
     if request.method == 'POST':

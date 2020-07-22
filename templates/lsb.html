@@ -4,49 +4,109 @@
 <head>
     <title>Estaganografía: Tecnica LSB</title>
     <!-- <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/style.css') }}" /> -->
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-black.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css">
+
+    <style>
+        #upload-photo {
+            opacity: 0;
+            position: absolute;
+            z-index: -1;
+        }
+    </style>
+    <script language="JavaScript">
+        function inform(variable) {
+            document.querySelector("#file_name").value = document.getElementById('upload-photo').files[0].name;
+        }
+    </script>
+
 </head>
 
 <body>
-    <div>
-        <h2>Mensaje encode</h2>
+    <!-- Header -->
+    <header class="w3-container w3-theme w3-padding" id="myHeader">
+        <div class="w3-center">
+            <h4>UBA facultad de ingenieria</h4>
+            <br>
+            <h1>86.36 - Criptografía y Seguridad Informática</h1>
+            <h3>Trabajo Práctico Final</h3>
+            <h3>Esteganografía</h3>
+        </div>
+    </header>
 
-        <form action="/encodearBIENPERRO" method="post" enctype=multipart/form-data>
-            <div>
-                Message to hidde:
+    <div class="w3-container">
+        <div class="w3-center">
+            <h2>Técnica de sustitución de bit menos significativo</h2>
+        </div>
+        <hr>
+        <div class="w3-row ">
+            <div class="w3-center">
+                <h3>Generación de imagen esteganográfica</h3>
             </div>
-            <div>
-                <input type="text" name="message_to_hidde" value=""></div>
-            <br>
-            <br>
-            <div>
-                <label>Select image</label>
-                <div class="custom-file">
-                    <input type=file name=file>
+            <div class="w3-half w3-container ">
+
+                <form action="/encodearBIENPERRO" method="post" enctype=multipart/form-data>
+                    <div class="w3-row-padding">
+
+                        <form class="w3-container w3-card-4">
+                            <div>
+                                <h5>Mensaje</h5>
+                                <div class="w3-section">
+                                    <input type="text" name="message_to_hidde" class="w3-input" required>
+                                </div>
+                            </div>
+
+                            <div>
+                                <h5>Imágen</h5>
+                                <div class="w3-section">
+                                    <label for="upload-photo" class="w3-button w3-theme">Subir imágen</label>
+                                    <input type=file name=file class="w3-input" id="upload-photo" onChange='inform()' required>
+                                    <div class="w3-section">
+                                        <input type="text" id="file_name" class="w3-input" required>
+                                    </div>
+                                    <!-- <input type="text" class="w3-input">{{ input_file }} -->
+                                </div>
+                            </div>
+
+                            <div class="w3-center">
+                                <br>
+                                <p><button class="w3-button w3-theme">Generar</button></p>
+                            </div>
+                        </form>
+
+                    </div>
+                </form>
+            </div>
+
+            <div class="w3-half w3-container">
+                <div class="w3-row-padding w3-center">
+                    <form class="w3-container w3-card-4">
+                        <div>
+                            <h5>Imagen original</h5>
+                            {% if src_img %}
+                            <div>
+                                <img src={{ src_img}}>
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <div>
+                            <h5>Imagen steganografaca?</h5>
+
+                            {% if stego_img %}
+                            <div>
+                                <img src={{ stego_img}}>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div>
+                            {{ message_hidden }}
+                        </div>
+                    </form>
                 </div>
             </div>
-            <div>
-                <input type="submit" value="Encodear">
-            </div>
-        </form>
-        {% if src_img %}
-        <div>
-            <img src={{ src_img}}>
         </div>
-        {% endif %}
-
-    </div>
-    <div>
-        <h2>Message decode:</h2>
-
-        {% if stego_img %}
-        <div>
-            <img src={{ stego_img}}>
-        </div>
-        {% endif %}
-    </div> -->
-    <div>
-        {{ message_hidden }}
-    </div>
     </div>
 </body>
 
