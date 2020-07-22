@@ -4,7 +4,7 @@
 <head>
     <title>Estaganografía: Tecnica LSB</title>
     <!-- <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/style.css') }}" /> -->
-<<<<<<< HEAD
+
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-black.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css">
@@ -107,51 +107,14 @@
                     </form>
                 </div>
             </div>
-=======
-</head>
 
-<body>
-    <div>
-        <h2>Mensaje encode</h2>
-
-        <form action="/encodearBIENPERRO" method="post" enctype=multipart/form-data>
-            <div>
-                Message to hidde:
-            </div>
-            <div>
-                <input type="text" name="message_to_hidde" value=""></div>
-            <br>
-            <br>
-            <div>
-                <label>Select image</label>
-                <div class="custom-file">
-                    <input type=file name=file>
-                </div>
-            </div>
-            <div>
-                <input type="submit" value="Encodear">
-            </div>
-        </form>
-
-    </div>
-    <div>
-        <h2>Message decode:</h2>
-        <div>
-            {% if img_src %}
             <img src={{ stego_img}}>
-
-            <!-- <img src={# url_for( 'static', filename={{ stego_img | default( 'test.jpg') }} ) #} style="width:326px;height:288px;"> -->
-            <!-- <img src={ { stego_img } } style="width:326px;height:288px;"> -->
-            <!-- <img src="../../../static/icons/${stego_img}.png"> -->
-            <!-- <img src={-{ url_for( 'static', filename='test.png' ) }-} style="width:326px;height:288px;"> -->
-            <!-- <img src="${img}">
-            <img src="{{url_for('static', filename='Hermes.png')}}" align="middle" /> -->
-            {% endif %}
         </div>
-        <div>
-            {{ message_hidden }}
->>>>>>> 4af29ea... Agrego paginas de app y minimo funcionamiento
-        </div>
+        {% endif %}
+    </div> -->
+    <div>
+        {{ message_hidden }}
+    </div>
     </div>
 </body>
 
