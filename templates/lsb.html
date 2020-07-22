@@ -4,7 +4,10 @@
 <head>
     <title>Estaganografía: Tecnica LSB</title>
     <!-- <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/style.css') }}" /> -->
+<<<<<<< HEAD
 
+=======
+>>>>>>> 9fe091c... Agrego estilos, faltan adapatar unas cosas y arreglar unso bugs
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-black.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css">
@@ -94,6 +97,7 @@
 
                         <div>
                             <h5>Imagen steganografaca?</h5>
+<<<<<<< HEAD
 
                             {% if stego_img %}
                             <div>
@@ -109,12 +113,22 @@
             </div>
 
             <img src={{ stego_img}}>
+=======
+
+                            {% if stego_img %}
+                            <div>
+                                <img src={{ stego_img}}>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div>
+                            {{ message_hidden }}
+                        </div>
+                    </form>
+                </div>
+            </div>
+>>>>>>> 9fe091c... Agrego estilos, faltan adapatar unas cosas y arreglar unso bugs
         </div>
-        {% endif %}
-    </div> -->
-    <div>
-        {{ message_hidden }}
-    </div>
     </div>
 </body>
 
