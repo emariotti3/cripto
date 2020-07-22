@@ -28,25 +28,25 @@
                 <input type="submit" value="Encodear">
             </div>
         </form>
+        {% if src_img %}
+        <div>
+            <img src={{ src_img}}>
+        </div>
+        {% endif %}
 
     </div>
     <div>
         <h2>Message decode:</h2>
-        <div>
-            {% if img_src %}
-            <img src={{ stego_img}}>
 
-            <!-- <img src={# url_for( 'static', filename={{ stego_img | default( 'test.jpg') }} ) #} style="width:326px;height:288px;"> -->
-            <!-- <img src={ { stego_img } } style="width:326px;height:288px;"> -->
-            <!-- <img src="../../../static/icons/${stego_img}.png"> -->
-            <!-- <img src={-{ url_for( 'static', filename='test.png' ) }-} style="width:326px;height:288px;"> -->
-            <!-- <img src="${img}">
-            <img src="{{url_for('static', filename='Hermes.png')}}" align="middle" /> -->
-            {% endif %}
-        </div>
+        {% if stego_img %}
         <div>
-            {{ message_hidden }}
+            <img src={{ stego_img}}>
         </div>
+        {% endif %}
+    </div> -->
+    <div>
+        {{ message_hidden }}
+    </div>
     </div>
 </body>
 
