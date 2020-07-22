@@ -1,27 +1,65 @@
 <!doctype html>
 <html>
+
 <head>
-  <title>LSB</title>
-  <!-- <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/style.css') }}" /> -->
+    <title>Estaganografía: Tecnica LSB</title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-black.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css">
 </head>
+
 <body>
-  <h2>Mensaje</h2>
-  <form action="/text" method="post">
-    Input text:<br>
-    <input type="text" name="text_input" value="">
-    <br>
-    <input type="submit" value="Submit">
-  </form>
-  <div>
-  <img src= {{ url_for('static', filename = 'test.png') }} style="width:326px;height:288px;">
-  </div>
-  <div id='foo'>
-    <br>
-    {% for comment in comments %}
-    <div class="row">
-      {{ comment }} 
-    </div>
-    {% endfor %}
-  </div>
+
+    <!-- Header -->
+    <header class="w3-container w3-theme w3-padding" id="myHeader">
+        <div class="w3-center">
+            <h4>UBA facultad de ingenieria</h4>
+            <br>
+            <h1>86.36 - Criptografía y Seguridad Informática</h1>
+            <h3>Trabajo Práctico Final</h3>
+            <h3>Esteganografía</h3>
+    </header>
+
+    <br><br><br><br>
+
+    <div class="w3-container">
+        <div class="w3-center">
+            <h2>Integrantes</h2>
+        </div>
+        <div class="w3-responsive w3-card-4">
+            <table class="w3-table w3-striped w3-bordered">
+                <thead>
+                    <tr class="w3-theme">
+                        <th>Estudiante</th>
+                        <th>Padrón</th>
+                        <th>Mail</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Ayelén Bibiloni Lombardi</td>
+                        <td>93731</td>
+                        <td>abibiloni@fi.uba.ar</td>
+                    </tr>
+                    <tr class="w3-white">
+                        <td>María Eugenia Mariotti</td>
+                        <td>96260</td>
+                        <td>mmariotti@fi.uba.ar</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <hr>
+        <div class="w3-center">
+            <br>
+            <div class="w3-padding-32">
+                <form action="/demoLSB " method="post">
+                    <p><button class="w3-button w3-theme">Demo LSB</button></p>
+                </form>
+            </div>
+            <br>
+        </div>
 </body>
+
 </html>
