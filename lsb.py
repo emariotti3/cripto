@@ -84,3 +84,44 @@ def embed_hidden_message(path_in, message_to_hidde):
   print("RECUPERADO: {} - largo: {}".format(message_hidden, len(message_hidden)))
   return message_hidden
 
+
+#  def embed_hidden_message(path_in, message_to_hidde):
+#    print("ORIGINAL: {} - largo: {}".format(message_to_hidde, len(message_to_hidde)))
+# -
+# -  ruta,filename = path.split(path_in)
+# -  path_out = path.join(ruta,"modificated-"+ filename )
+
+#    input_img = Image.open(path_in)
+#    output_img = generate_stegoimage(input_img, message_to_hidde)
+# -  output_img.save(path_out)
+# +  output_img.save(PATH_OUT3)
+#    input_img.close()
+
+# -  stego_image = Image.open(path_out)
+# -  message_hidden = get_hidden_message(stego_image)
+# +  stego_image = Image.open(PATH_OUT3)
+# +  message_hidden = recuperar_mensaje(stego_image)
+#    stego_image.close()
+
+#    print("RECUPERADO: {} - largo: {}".format(message_hidden, len(message_hidden)))
+# -  return message_hidden, path_out
+# +  return message_hidden
+
+def formato_byte(binario):
+  return (NULL + binario.replace("0b",""))[-8:]
+
+def get_bytes_for_pixels( src_img):
+  input_img = Image.open(src_img)
+  width, height = input_img.size
+  bytesarr = []
+  for i in range(width):
+    for j in range(height):
+      red,green,blue, *_ = input_img.getpixel((i, j))[:]
+      bytesarr.append([formato_byte(str(bin(red))),formato_byte(str(bin(green))),formato_byte(str(bin(blue)))])
+  input_img.close()
+  return bytesarr[:40]
+
+def cadena(m):
+  return [[formato_byte(format(ord(x), 'b')) , x] for x in m]
+
+

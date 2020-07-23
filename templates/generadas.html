@@ -1,0 +1,183 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Estaganografía: Tecnica LSB</title>
+    <!-- <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/style.css') }}" /> -->
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-black.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css">
+
+    <style>
+        #upload-photo {
+            opacity: 0;
+            position: absolute;
+            z-index: -1;
+        }
+        
+        .red {
+            color: red;
+        }
+        
+        .green {
+            color: green;
+        }
+    </style>
+    <script language="JavaScript">
+        function inform(variable) {
+            document.querySelector("#file_name").value = document.getElementById('upload-photo').files[0].name;
+        }
+    </script>
+
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="w3-container w3-theme w3-padding" id="myHeader">
+        <div class="w3-center">
+            <h4>UBA facultad de ingenieria</h4>
+            <br>
+            <h1>86.36 - Criptografía y Seguridad Informática</h1>
+            <h3>Trabajo Práctico Final</h3>
+            <h3>Esteganografía</h3>
+        </div>
+    </header>
+
+    <div class="w3-container">
+        <div class="w3-center">
+            <h2>Técnica de sustitución de bit menos significativo</h2>
+        </div>
+        <hr>
+        <div class="w3-row ">
+            <div class="w3-center">
+                <h3>Generación de imagen esteganográfica</h3>
+            </div>
+            <!-- <div class="w3-container "> -->
+            <div class="w3-half w3-container ">
+                <div class="w3-row-padding w3-center">
+                    <div>
+                        <h5>Imagen original</h5>
+
+                    </div>
+                    <div class="w3-container">
+                        <div class="w3-responsive w3-card-4">
+                            {% if src_img %}
+                            <img src={{ src_img}} alt="Original" style="width:100%"> {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="w3-row-padding w3-center w3-margin-top">
+                        <div class="w3-responsive w3-card-4">
+                            <table class="w3-table w3-striped w3-bordered">
+                                <thead>
+                                    <tr class="w3-theme">
+                                        <th>Red</th>
+                                        <th>Green</th>
+                                        <th>Blue</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for pixel_o in pixeles_originales %}
+                                    <tr>
+                                        {% for byte in pixel_o %}
+                                        <td>{{byte}}</td>
+                                        {% endfor %}
+                                    </tr>
+                                    {% endfor %}
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="w3-half w3-container ">
+                <div class="w3-row-padding w3-center">
+                    <div>
+                        <h5>Imágen esteganográfica</h5>
+
+                    </div>
+
+                    <div class="w3-container">
+                        <div class="w3-responsive w3-card-4">
+                            {% if src_img %}
+                            <img src={{ stego_img}} alt="Original" style="width:100%"> {% endif %}
+                        </div>
+                    </div>
+
+                </div>
+                <div class="w3-row-padding w3-center w3-margin-top">
+                    <div class="w3-responsive w3-card-4">
+                        <table class="w3-table w3-striped w3-bordered">
+                            <thead>
+                                <tr class="w3-theme">
+                                    <th>Red</th>
+                                    <th>Green</th>
+                                    <th>Blue</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for pixel_m in pixeles_modificados %}
+                                <tr>
+                                    {% for byte in pixel_m %}
+                                    <td>{{byte}}</td>
+                                    {% endfor %}
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="w3-row ">
+        <div class="w3-center">
+            <h3>Recuperación de mensaje oculto</h3>
+        </div>
+        <div class="w3-row-padding w3-center w3-margin-top w3-half">
+            <div class="w3-responsive w3-card-4">
+                <div class="w3-col w3-bordered">
+                    {% for item in seq %}
+                    <span class="{{'red' if loop.index % 8 == 0}}">{{ item }}</span> {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="w3-row-padding w3-center w3-margin-top w3-half">
+            <div class="w3-responsive w3-card-4">
+                <table class="w3-table w3-striped w3-bordered ">
+                    <thead>
+                        <tr class="w3-theme">
+                            <th>Byte</th>
+                            <th>ASCII</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for cararcter in mensaje_bytes %}
+                        <tr>
+                            {% for byte in cararcter %}
+                            <td>{{byte}}</td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {{ message_hidden }}
+        </div>
+    </div>
+    <hr>
+    <div class="w3-center">
+        <br>
+        <div class="w3-padding-32">
+            <form action="/demoLSB " method="post">
+                <p><button class="w3-button w3-theme">Volver</button></p>
+            </form>
+        </div>
+        <br>
+    </div>
+</body>
+
+</html>
