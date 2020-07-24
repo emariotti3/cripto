@@ -13,8 +13,9 @@
 #define SRC_PORT 3333 
 #define MAXLINE 1024 
 
+typedef unsigned char BYTE;
 
-int string_to_bytes(char *message, int message_len, int *bytes) {
+int string_to_bytes(char *message, int message_len, BYTE *bytes) {
     for(int i = 0; i < message_len; i++) {
         bytes[i] += message[i];
     }
@@ -34,8 +35,9 @@ int main() {
     int sockfd; 
     char *hello = "Hello from client"; 
     char secret_message[25] = "This is my secret message"; 
-    int secret_message_len = 25;//strlen(secret_message);
-    int secret_message_bytes_buffer[secret_message_len];
+    int secret_message_len = 25;
+
+    BYTE secret_message_bytes_buffer[secret_message_len];
     
     memset(&secret_message_bytes_buffer, 0, secret_message_len); 
     string_to_bytes(secret_message, secret_message_len, secret_message_bytes_buffer);
