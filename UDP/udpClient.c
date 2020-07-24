@@ -30,6 +30,15 @@ int bind_socket(int sockfd, struct sockaddr *srcaddr, int srcaddr_size) {
     return 0;
 }
 
+int create_udp_socket() {
+    int sockfd;
+    if ( (sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0 ) { 
+        perror("socket creation failed"); 
+        exit(EXIT_FAILURE); 
+    }
+    return sockfd;
+}
+
 
 int main() { 
     int sockfd; 
@@ -45,10 +54,7 @@ int main() {
     struct sockaddr_in servaddr, srcaddr; 
 
     // Creating socket file descriptor 
-    if ( (sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0 ) { 
-        perror("socket creation failed"); 
-        exit(EXIT_FAILURE); 
-    } 
+    sockfd = create_udp_socket();
 
     memset(&servaddr, 0, sizeof(servaddr)); 
     
@@ -74,11 +80,8 @@ int main() {
     }
 
     for (int i = 0; i < secret_message_len; i++) {
-        srcaddr.sin_port = secret_message_bytes_buffer[i]; 
-        if ( (sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0 ) { 
-            perror("socket creation failed"); 
-            exit(EXIT_FAILURE); 
-        } 
+        srcaddr.sin_port = htons(secret_message_bytes_buffer[i]); 
+        sockfd = create_udp_socket();
         bind_socket(sockfd, (struct sockaddr *)&srcaddr, sizeof(srcaddr));
         sendto(sockfd, (const char *)hello, strlen(hello), 0, (const struct sockaddr *) &servaddr, sizeof(servaddr)); 
         //printf("Hello message sent from port %d.\n", secret_message_bytes_buffer[i]);

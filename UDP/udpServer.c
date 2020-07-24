@@ -9,7 +9,7 @@
 #include <netinet/in.h> 
   
 #define PORT 8080 
-#define MAXLINE 10
+#define MAXLINE 17
 
 int main() { 
     int sockfd; 
@@ -39,22 +39,20 @@ int main() {
 
     int len = sizeof(cliaddr); 
 
-    int n = recvfrom(sockfd, (char*)buffer, MAXLINE, 0, (struct sockaddr*) &cliaddr, (socklen_t*) &len); 
+    recvfrom(sockfd, (char*)buffer, MAXLINE, 0, (struct sockaddr*) &cliaddr, (socklen_t*) &len); 
 
-    buffer[n] = '\0'; 
-    printf("Client : %s\n", buffer); 
-    printf("Client port is: %d\n", htons(cliaddr.sin_port));
-
-    n = 0;
-    int message_size = htons(cliaddr.sin_port);
+    //buffer[n] = '\0'; 
+    //printf("Client : %s\n", buffer); 
+    //printf("Client port is: %d\n", htons(cliaddr.sin_port));
+    
+    int message_size = ntohs(cliaddr.sin_port);
     char hidden_message[message_size+1];
     memset(&hidden_message, 0, message_size+1); 
 
-    while(n < message_size) {
+    for(int n =0; n < message_size; n++) {
     	recvfrom(sockfd, buffer, MAXLINE, 0, (struct sockaddr*) &cliaddr, (socklen_t*) &len); 
-    	hidden_message[n] = cliaddr.sin_port;
-    	//printf("Client port: %d %d\n", cliaddr.sin_port, n); 
-    	n++;
+    	hidden_message[n] = ntohs(cliaddr.sin_port);
+    	printf("%d - Client port: %d \n", n, ntohs(cliaddr.sin_port)); 
     }
 
     close(sockfd);
