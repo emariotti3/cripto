@@ -2,7 +2,7 @@
 
 from flask import Flask, render_template, request, redirect, url_for, flash
 from werkzeug.utils import secure_filename
-import os
+import os, re
 import lsb as lsb
 import eof as eof
 
@@ -10,13 +10,18 @@ FILE_PATH = os.path.abspath(os.path.dirname(__file__))
 EOF_FOLDER = 'EOF'
 LSB_FOLDER = 'LSB'
 ALLOWED_EXTENSIONS = {'png', 'jpg'}
+PIXELES_DISPLAYED = 15
+SYS_IMG = 'IMG_PAGE'
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'static'
 app.secret_key = os.urandom(24)
 
-def get_path(filename):
+def get_full_path(filename):
     return os.path.join(FILE_PATH, app.config['UPLOAD_FOLDER'], filename)
+
+def get_path(filename):
+    return os.path.join(app.config['UPLOAD_FOLDER'], filename)
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -39,9 +44,13 @@ def uploaded(request):
 
 @app.route('/', methods=['GET'])
 def index():
-   return render_template("index.html")
+    for f in os.listdir(app.config['UPLOAD_FOLDER']):
+        if not f == SYS_IMG:
+            os.remove(get_path(f))
+    return render_template("index.html")
 
-@app.route('/eof_demo', methods=['GET', 'POST'])
+
+@app.route('/eof_demo', methods=['GET'])
 def render_eof():
     return render_template("eof.html")
 
@@ -49,34 +58,29 @@ def render_eof():
 def eof_result():
     message_to_hidde = request.form['message_to_hidde']
     filename = uploaded(request)
-
-    path_in = get_path(filename)
-    path_out = get_path(eof.PATH_OUT)
+    path_in = get_full_path(filename)
+    path_out = get_full_path(eof.PATH_OUT)
     eof.append_hidden_message(path_in, message_to_hidde, path_out)
-    
-    image_file = url_for('static', filename=filename)
     orginal_binary = eof.get_img_binary(path_in)
     stegoimage_binary = eof.get_img_binary(path_out)
-    return render_template("eof_result.html",  src_img=image_file, stego_img=eof.PATH_OUT3,original_binary=orginal_binary, stegoimage_binary=stegoimage_binary)
+    return render_template("eof_result.html", src_img=get_path(filename), stego_img=get_path(eof.PATH_OUT), original_binary=orginal_binary, stegoimage_binary=stegoimage_binary)
 
-@app.route('/lsb_demo', methods=['GET', 'POST'])
+@app.route('/lsb_demo', methods=['GET'])
 def render_lsb():
     return render_template("lsb.html")
 
 @app.route('/lsb_result', methods=['POST'])
 def lsb_result():
-    userEmail = request.form['message_to_hidde']
+    message_to_hidde = request.form['message_to_hidde']
     filename = uploaded(request)
-    message_hidden = lsb.embed_hidden_message(os.path.join(FILE_PATH, app.config['UPLOAD_FOLDER'], filename), userEmail )
-    image_file = url_for('static', filename=filename)
-
-    original = lsb.get_bytes_for_pixels(os.path.join(FILE_PATH, app.config['UPLOAD_FOLDER'], filename))[:15]
-    modificados =  lsb.get_bytes_for_pixels(lsb.PATH_OUT3)
-    seq = "".join([j for i in modificados for j in i] )
-    mb = lsb.cadena(userEmail)
-    
-    return render_template("lsb_result.html", message_hidden=message_hidden, src_img=image_file, stego_img=lsb.PATH_OUT3, pixeles_originales= original, pixeles_modificados=modificados[:15], mensaje_bytes=mb, seq=seq)
-
+    path_in = get_full_path(filename)
+    path_out = get_full_path(lsb.PATH_OUT)
+    message_hidden = lsb.embed_hidden_message(path_in, message_to_hidde, path_out)
+    original_pixel_rgb = lsb.get_bytes_for_pixels(path_in)[:PIXELES_DISPLAYED]
+    stego_pixel_rgb =  lsb.get_bytes_for_pixels(get_path(lsb.PATH_OUT))[:PIXELES_DISPLAYED]
+    joined_bytes = "".join([byte for pixel in stego_pixel_rgb for byte in pixel] )
+    bytes_message = lsb.get_bytes(message_to_hidde)
+    return render_template("lsb_result.html", message_hidden=message_hidden, src_img=get_path(filename), stego_img=get_path(lsb.PATH_OUT), pixeles_originales= original_pixel_rgb, pixeles_modificados=stego_pixel_rgb, bytes_message=bytes_message, bits=joined_bytes)
 
 if __name__ == '__main__':
-   app.run(debug=True)
+   app.run(debug=True) 
