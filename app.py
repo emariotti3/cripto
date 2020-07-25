@@ -3,70 +3,24 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from werkzeug.utils import secure_filename
 import os
-import lsb as ss
+import lsb as lsb
+import eof as eof
 
-BASEDIR = os.path.abspath(os.path.dirname(__file__))
-UPLOAD_FOLDER = 'static'
+FILE_PATH = os.path.abspath(os.path.dirname(__file__))
+EOF_FOLDER = 'EOF'
+LSB_FOLDER = 'LSB'
 ALLOWED_EXTENSIONS = {'png', 'jpg'}
 
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['UPLOAD_FOLDER'] = 'static'
 app.secret_key = os.urandom(24)
 
-@app.route('/')
-def index():
-   return render_template("index.html")
-
-# @app.route('/messageToHidde', methods=['POST'])
-# def messageToHidde():
-#     if request.method == "POST":
-#         MENSAJE = ss.embed_hidden_message2()
-#         return render_template("lsb.html", comment=MENSAJE)#request.form["text_input"])
-#     return render_template("lsb.html")
-
-@app.route('/text', methods=['GET', 'POST'])
-def text(comments=[]):
-    if request.method == "GET":
-        return render_template("lsb.html", comments=comments)    
-    comments.append(request.form["text_input"])  
-    return redirect(url_for('text'))
+def get_path(filename):
+    return os.path.join(FILE_PATH, app.config['UPLOAD_FOLDER'], filename)
 
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
-@app.route('/demoLSB', methods=['GET', 'POST'])
-def render_lsb():
-    return render_template("lsb.html")
-
-@app.route('/demoEOF', methods=['GET', 'POST'])
-def render_eof():
-    return render_template("text.html")
-
-@app.route('/resultseof', methods=['GET', 'POST'])
-def render_results_eof():
-
-    # return render_template("generadas.html", message_hidden=message_hidden, src_img=image_file, stego_img=ss.PATH_OUT3, pixeles_originales= original, pixeles_modificados=modificados[:15], mensaje_bytes=mb, seq=seq)
-    return render_template("text.html")
-
-@app.route('/lsb_endpoint', methods=['GET', 'POST'])
-def lsb_endpoint():
-    if request.method == 'POST':
-        # check if the post request has the file part
-        if 'file' not in request.files:
-            flash('No file part')
-            return redirect(request.url)
-        file = request.files['file']
-        # if user does not select file, browser also
-        # submit an empty part without filename
-        if file.filename == '':
-            flash('No selected file')
-            return redirect(request.url)
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(BASEDIR, app.config['UPLOAD_FOLDER'], filename))
-            return redirect(request.url)
-    return render_template("lsb.html")
 
 def uploaded(request):
     filename = ''
@@ -74,49 +28,54 @@ def uploaded(request):
         flash('No file part')
         return redirect(request.url)
     file = request.files['file']
-    # if user does not select file, browser also
-    # submit an empty part without filename
     if file.filename == '':
         flash('No selected file')
         return redirect(request.url)
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
-        file.save(os.path.join(BASEDIR, app.config['UPLOAD_FOLDER'], filename))
+        file.save(os.path.join(FILE_PATH, app.config['UPLOAD_FOLDER'], filename))
     return filename
 
-@app.route('/encodearBIENPERRO', methods=['POST'])
-def encodearBIENPERRO():
+
+@app.route('/', methods=['GET'])
+def index():
+   return render_template("index.html")
+
+@app.route('/eof_demo', methods=['GET', 'POST'])
+def render_eof():
+    return render_template("eof.html")
+
+@app.route('/eof_result', methods=['GET', 'POST'])
+def eof_result():
+    message_to_hidde = request.form['message_to_hidde']
+    filename = uploaded(request)
+
+    path_in = get_path(filename)
+    path_out = get_path(eof.PATH_OUT)
+    eof.append_hidden_message(path_in, message_to_hidde, path_out)
+    
+    image_file = url_for('static', filename=filename)
+    orginal_binary = eof.get_img_binary(path_in)
+    stegoimage_binary = eof.get_img_binary(path_out)
+    return render_template("eof_result.html",  src_img=image_file, stego_img=eof.PATH_OUT3,original_binary=orginal_binary, stegoimage_binary=stegoimage_binary)
+
+@app.route('/lsb_demo', methods=['GET', 'POST'])
+def render_lsb():
+    return render_template("lsb.html")
+
+@app.route('/lsb_result', methods=['POST'])
+def lsb_result():
     userEmail = request.form['message_to_hidde']
     filename = uploaded(request)
-    message_hidden = ss.embed_hidden_message(os.path.join(BASEDIR, app.config['UPLOAD_FOLDER'], filename), userEmail )
+    message_hidden = lsb.embed_hidden_message(os.path.join(FILE_PATH, app.config['UPLOAD_FOLDER'], filename), userEmail )
     image_file = url_for('static', filename=filename)
 
-    original = ss.get_bytes_for_pixels(os.path.join(BASEDIR, app.config['UPLOAD_FOLDER'], filename))[:15]
-    modificados =  ss.get_bytes_for_pixels(ss.PATH_OUT3)
+    original = lsb.get_bytes_for_pixels(os.path.join(FILE_PATH, app.config['UPLOAD_FOLDER'], filename))[:15]
+    modificados =  lsb.get_bytes_for_pixels(lsb.PATH_OUT3)
     seq = "".join([j for i in modificados for j in i] )
-    mb = ss.cadena(userEmail)
-
-    # return render_template("lsb.html", message_hidden=message_hidden, src_img=image_file, stego_img=ss.PATH_OUT3 )
-    return render_template("generadas.html", message_hidden=message_hidden, src_img=image_file, stego_img=ss.PATH_OUT3, pixeles_originales= original, pixeles_modificados=modificados[:15], mensaje_bytes=mb, seq=seq)
-
-
-#  @app.route('/encodearBIENPERRO', methods=['POST'])
-#  def encodearBIENPERRO():
-# -    message_to_hidde = request.form['message_to_hidde']
-# +    userEmail = request.form['message_to_hidde']
-#      filename = uploaded(request)
-# -    message_hidden, path_out = ss.embed_hidden_message(os.path.join(BASEDIR, app.config['UPLOAD_FOLDER'], filename), message_to_hidde )
-# -    # image_file = url_for('static', filename=filename)
-# -    # original = ss.get_bytes_for_pixels(os.path.join(BASEDIR, app.config['UPLOAD_FOLDER'], filename))[:15]
-# -    # modificados =  ss.get_bytes_for_pixels(path_out)
-# -    # seq = "".join([j for i in modificados for j in i] )
-# -    # mb = ss.cadena(message_to_hidde)
-# -    return render_template("generadas.html", message_hidden=message_hidden, src_img=image_file, stego_img=path_out , pixeles_originales= original, pixeles_modificados=modificados[:15], mensaje_bytes=mb, seq=seq)
-# +    message_hidden = ss.embed_hidden_message(os.path.join(BASEDIR, app.config['UPLOAD_FOLDER'], filename), userEmail )
-# +    image_file = url_for('static', filename=filename)
-# +    return render_template("lsb.html", message_hidden=message_hidden, src_img=image_file, stego_img=ss.PATH_OUT3 )
-
-
+    mb = lsb.cadena(userEmail)
+    
+    return render_template("lsb_result.html", message_hidden=message_hidden, src_img=image_file, stego_img=lsb.PATH_OUT3, pixeles_originales= original, pixeles_modificados=modificados[:15], mensaje_bytes=mb, seq=seq)
 
 
 if __name__ == '__main__':

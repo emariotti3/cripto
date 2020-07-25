@@ -1,7 +1,7 @@
 from PIL import Image
 
 PATH_IN = "test.png"
-PATH_OUT = "out.png"
+PATH_OUT = "lsb_out.png"
 BITS_FOR_PIXEL = 3
 NULL = '00000000'
 PATH_OUT3= "static\\" + PATH_OUT

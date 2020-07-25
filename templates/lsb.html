@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Estaganografía: Tecnica LSB</title>
+    <title>Estaganografía</title>
     <!-- <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/style.css') }}" /> -->
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-black.css">
@@ -29,7 +29,7 @@
         <div class="w3-center">
             <h4>UBA facultad de ingenieria</h4>
             <br>
-            <h1>86.36 - Criptografía y Seguridad Informática</h1>
+            <h1>66.69 - Criptografía y Seguridad Informática</h1>
             <h3>Trabajo Práctico Final</h3>
             <h3>Esteganografía</h3>
         </div>
@@ -40,13 +40,16 @@
             <h2>Técnica de sustitución de bit menos significativo</h2>
         </div>
         <hr>
+
         <div class="w3-row ">
             <div class="w3-center">
                 <h3>Generación de imagen esteganográfica</h3>
             </div>
+            <br>
             <div class="w3-half w3-container ">
-
-                <form action="/encodearBIENPERRO" method="post" enctype=multipart/form-data>
+                <br>
+                <br>
+                <form action="/lsb_result" method="post" enctype=multipart/form-data>
                     <div class="w3-row-padding">
 
                         <form class="w3-container w3-card-4">
@@ -65,7 +68,6 @@
                                     <div class="w3-section">
                                         <input type="text" id="file_name" class="w3-input" required>
                                     </div>
-                                    <!-- <input type="text" class="w3-input">{{ input_file }} -->
                                 </div>
                             </div>
 
@@ -81,34 +83,25 @@
 
             <div class="w3-half w3-container">
                 <div class="w3-row-padding w3-center">
-                    <form class="w3-container w3-card-4">
+                    <form class="w3-container w3-card">
                         <div>
-                            <h5>Imagen original</h5>
-                            {% if src_img %}
-                            <div>
-                                <img src={{ src_img}}>
-                            </div>
-                            {% endif %}
-                        </div>
-
-                        <div>
-                            <h5>Imagen steganografaca?</h5>
-
-                            {% if stego_img %}
-                            <div>
-                                <img src={{ stego_img}}>
-                            </div>
-                            {% endif %}
-                        </div>
-                        <div>
-                            {{ message_hidden }}
+                            <img src="static\\IMG_PAGE\\IMG_LSB.jpg" alt="Original" style="width:100%">
                         </div>
                     </form>
                 </div>
             </div>
 
-            <img src={{ stego_img}}>
         </div>
+    </div>
+    <hr>
+    <div class="w3-center">
+        <br>
+        <div class="w3-padding-32">
+            <form action="/" method="get">
+                <p><button class="w3-button w3-theme">Volver</button></p>
+            </form>
+        </div>
+        <br>
     </div>
 </body>
 

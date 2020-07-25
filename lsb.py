@@ -73,9 +73,9 @@ def get_message_of_lsb(src_img):
   message_hidden = recuperar_mensaje(stego_image)
   # print('Mensaje recuperado:', message_hidden)
   stego_image.close()
-  return message_hiddenpy
+  return message_hidden
 
-get_message_of_lsb('static\\out.png')
+
 
 
 def embed_hidden_message(path_in, message_to_hidde):
