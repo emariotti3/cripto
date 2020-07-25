@@ -4,6 +4,11 @@ Dependencias:
 - Python3
 - [Pillow](https://pillow.readthedocs.io/en/latest/installation.html)
 
+## Esteganografía con EOF y LSB
+
+![EOF y LSB](https://github.com/emariotti3/cripto/blob/master/APP_GIF.gif)
+
+
 ## Esteganografía con UDP
 Modo de uso:
 Primero moverse al directorio que contiene el proyecto de UDP
