@@ -49,7 +49,11 @@ def generate_stegoimage(src_img, messege_to_hide, cant_bits=1):
     for j in range(height):
       red,green,blue, *_ = src_img.getpixel((i, j))[:]
       pixel_number = i * height + j
-      last_bit_red, last_bit_green, last_bit_blue= get_chunk_of_bit_por_pixel(bits_to_hide, pixel_number)
+      last_bit_red, last_bit_green, last_bit_blue= 
+      chunk = get_chunk_of_bit_por_pixel(bits_to_hide, pixel_number)
+      for(i in range(cant_bits)):
+        pass
+
       pixeles[i, j] = (replace_last_bits(red, last_bit_red), replace_last_bits(green, last_bit_green), replace_last_bits(blue, last_bit_blue))
   return estego_img
 

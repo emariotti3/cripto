@@ -17,12 +17,12 @@ app.secret_key = os.urandom(24)
 def index():
    return render_template("index.html")
 
-@app.route('/messageToHidde', methods=['POST'])
-def messageToHidde():
-    if request.method == "POST":
-        MENSAJE = ss.embed_hidden_message2()
-        return render_template("lsb.html", comment=MENSAJE)#request.form["text_input"])
-    return render_template("lsb.html")
+# @app.route('/messageToHidde', methods=['POST'])
+# def messageToHidde():
+#     if request.method == "POST":
+#         MENSAJE = ss.embed_hidden_message2()
+#         return render_template("lsb.html", comment=MENSAJE)#request.form["text_input"])
+#     return render_template("lsb.html")
 
 @app.route('/text', methods=['GET', 'POST'])
 def text(comments=[]):
@@ -38,6 +38,16 @@ def allowed_file(filename):
 @app.route('/demoLSB', methods=['GET', 'POST'])
 def render_lsb():
     return render_template("lsb.html")
+
+@app.route('/demoEOF', methods=['GET', 'POST'])
+def render_eof():
+    return render_template("text.html")
+
+@app.route('/resultseof', methods=['GET', 'POST'])
+def render_results_eof():
+
+    # return render_template("generadas.html", message_hidden=message_hidden, src_img=image_file, stego_img=ss.PATH_OUT3, pixeles_originales= original, pixeles_modificados=modificados[:15], mensaje_bytes=mb, seq=seq)
+    return render_template("text.html")
 
 @app.route('/lsb_endpoint', methods=['GET', 'POST'])
 def lsb_endpoint():

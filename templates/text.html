@@ -37,16 +37,16 @@
 
     <div class="w3-container">
         <div class="w3-center">
-            <h2>Técnica de sustitución de bit menos significativo</h2>
+            <h2>Técnica de end of file EOF</h2>
         </div>
         <hr>
         <div class="w3-row ">
             <div class="w3-center">
-                <h3>Generación de imagen esteganográfica</h3>
+                <h3>Generación de imagen</h3>
             </div>
             <div class="w3-half w3-container ">
 
-                <form action="/encodearBIENPERRO" method="post" enctype=multipart/form-data>
+                <form action="/resultseof" method="post" enctype=multipart/form-data>
                     <div class="w3-row-padding">
 
                         <form class="w3-container w3-card-4">
@@ -65,7 +65,6 @@
                                     <div class="w3-section">
                                         <input type="text" id="file_name" class="w3-input" required>
                                     </div>
-                                    <!-- <input type="text" class="w3-input">{{ input_file }} -->
                                 </div>
                             </div>
 
@@ -81,33 +80,11 @@
 
             <div class="w3-half w3-container">
                 <div class="w3-row-padding w3-center">
-                    <form class="w3-container w3-card-4">
-                        <div>
-                            <h5>Imagen original</h5>
-                            {% if src_img %}
-                            <div>
-                                <img src={{ src_img}}>
-                            </div>
-                            {% endif %}
-                        </div>
 
-                        <div>
-                            <h5>Imagen steganografaca?</h5>
-
-                            {% if stego_img %}
-                            <div>
-                                <img src={{ stego_img}}>
-                            </div>
-                            {% endif %}
-                        </div>
-                        <div>
-                            {{ message_hidden }}
-                        </div>
-                    </form>
+                    <p style='text-align: justify;'>En computación, el bit menos significativo (LSB o Least Significant Bit, en sus siglas en inglés) es la posición de bit en un número binario que tiene el menor valor (el situado más a la derecha). En ocasiones, se hace referencia al
+                        LSB como el bit del extremo d.</p>
                 </div>
             </div>
-
-            <img src={{ stego_img}}>
         </div>
     </div>
 </body>
